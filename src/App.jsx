@@ -86,10 +86,14 @@ function App() {
       },
     },
   ];
-  const submitUpdata = () => {
-    const findDAta = data.indexOf((item) => item.id == handleValue.id);
-    console.log(findDAta);
+  const submitUpdata = (values) => {
+    const updatedData = data.map((item) =>
+      item.id === handleValue.id ? { ...item, ...values } : item
+    );
+    setData(updatedData);
+    setOpenUpdate(false);
   };
+
   const handleOk = () => {
     if (checkAction == "Add") {
       form.submit();
@@ -107,14 +111,16 @@ function App() {
     };
     setData([...data, form]);
   };
-
+  const handleUpdate = () => {
+    formUpdate.submit();
+  };
   return (
     <>
       <div>
         <Button
           onClick={() => {
             setOpen(true);
-            setAction("add");
+            setAction("Add");
           }}
           type="primary"
         >
@@ -130,7 +136,7 @@ function App() {
             setAction("");
           }}
         >
-          {checkAction === "add" ? (
+          {checkAction === "Add" ? (
             <Form form={form} onFinish={handleSubmit} layout="vertical">
               <Form.Item
                 name="title"
@@ -170,7 +176,7 @@ function App() {
         </Modal>
         <Modal
           onCancel={() => setOpenUpdate(false)}
-          onOk={formUpdate.submit()}
+          onOk={handleUpdate}
           open={oepnUpdate}
         >
           <Form
